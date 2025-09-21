@@ -38,6 +38,7 @@ int main(int argc, char *argv[])
 		send_bits(PID, message[i]);
 		i++;
 	}
+	send_bits(PID, '\0');
 	return (0);
 }
 
