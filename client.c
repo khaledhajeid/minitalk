@@ -2,6 +2,7 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "libft/libft.h"
 
 void send_bits(int PID, char c)
 {
@@ -14,7 +15,7 @@ void send_bits(int PID, char c)
 			kill(PID, SIGUSR2);
 		else
 			kill(PID, SIGUSR1);
-		usleep(100);
+		usleep(400);
 		//printf("%d\n", (c >> i));
 		i--;
 	}
