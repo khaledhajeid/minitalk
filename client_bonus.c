@@ -12,14 +12,17 @@
 
 #include "minitalk.h"
 
-int ack_receive = 0;
+static int ack_receive;
 
 void ack(int sig)
 {
 	if (sig == SIGUSR1)
 		ack_receive = 1;
 	else if (sig == SIGUSR2)
+	{
+		ft_printf("Message Received :)\n");
 		exit(0);
+	}
 }
 
 void send_bits(int PID, unsigned char c)

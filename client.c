@@ -12,7 +12,7 @@
 
 #include "minitalk.h"
 
-int ack_receive = 0;
+static int ack_receive;
 
 void ack(int sig)
 {

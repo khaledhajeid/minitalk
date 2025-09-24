@@ -12,25 +12,55 @@
 
 #include "minitalk.h"
 
-void signal_handler(int signal, siginfo_t *info, void *context)
+static char	*append_char(char *message, char c, int *i)
 {
-	static int number_of_bits;
-	static unsigned char c;
-	
+	char	*new_msg;
+
+	new_msg = malloc(*i + 2);
+	if (!new_msg)
+	{
+		free(message);
+		exit(1);
+	}
+	if (message)
+	{
+		ft_memcpy(new_msg, message, *i);
+		free(message);
+	}
+	new_msg[*i] = c;
+	new_msg[*i + 1] = '\0';
+	(*i)++;
+	return (new_msg);
+}
+
+static void	end_message(char **message, int *i, pid_t pid)
+{
+	if (*message)
+	{
+		ft_printf("%s\n", *message);
+		free(*message);
+		*message = NULL;
+		*i = 0;
+	}
+	kill(pid, SIGUSR2);
+}
+
+void	signal_handler(int signal, siginfo_t *info, void *context)
+{
+	static int				number_of_bits;
+	static unsigned char	c;
+	static char				*message;
+	static int				i;
+
 	(void)context;
-	c = c << 1;
-	if (signal == SIGUSR2)
-		c = c | 1;
+	c = (c << 1) | (signal == SIGUSR2);
 	number_of_bits++;
 	if (number_of_bits == 8)
 	{
 		if (c == '\0')
-		{
-			write (1, "\n", 1);
-			kill(info->si_pid, SIGUSR2);
-		}
+			end_message(&message, &i, info->si_pid);
 		else
-			write(1, &c, 1);
+			message = append_char(message, c, &i);
 		number_of_bits = 0;
 		c = 0;
 	}
