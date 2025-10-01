@@ -74,7 +74,7 @@ int main()
 	s.sa_sigaction = signal_handler;
 	s.sa_flags = SA_SIGINFO;
 
-	ft_printf("PID: %d\n", getpid());
+	ft_printf("\033[94mPID\033[0m \033[96m->\033[0m %d\n", getpid());
 	sigaction(SIGUSR1, &s, NULL);
 	sigaction(SIGUSR2, &s, NULL);
 
