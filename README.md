@@ -40,6 +40,9 @@ cd minitalk
 2. Build the project using the Makefile:
 ```c
 make
+
+And for build the bonus files use:
+make bonus
 ```
 This will generate server and client executables.
 
@@ -63,6 +66,8 @@ make fclean
 minitalk/
 ├── client.c
 ├── server.c
+├── client_bonus.c
+├── server_bonus.c
 ├── minitalk.h
 ├── Makefile
 └── README.md
