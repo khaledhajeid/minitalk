@@ -7,38 +7,61 @@
 ---
 
 ## Overview
-`Minitalk` is a **small client-server communication program** built in C using **Unix signals**.  
-It was my **first project involving inter-process communication (IPC)** and **signal handling**, marking a significant step in learning **low-level system programming**.
+`Minitalk` is a **lightweight client-server messaging system** built entirely using **Unix signals (`SIGUSR1` / `SIGUSR2`)** and leveraging my **Libft library** for utility functions.  
+It implements a **custom communication protocol** that sends data **bit by bit** between two separate processes, without using sockets or external libraries.  
 
-This project taught me how to:
-- Send messages between processes using `SIGUSR1` and `SIGUSR2`.  
-- Encode and decode messages bit by bit.  
-- Handle multiple clients safely and efficiently.  
-- Build a **robust communication protocol** without external libraries.  
+This project marked my **first experience with inter-process communication (IPC)** and **signal handling**, providing a solid foundation for **low-level system programming**.  
+The standard version sends ASCII characters bit by bit, while the bonus version adds **full Unicode support** and **server-to-client acknowledgement** for message delivery.
+
+---
+
+## How It Works
+
+| Component | Standard Version | Bonus Version |
+|-----------|-----------------|---------------|
+| Data Transfer | Each character sent **bit by bit** using signals | ✅ Same |
+| Unicode Support | ❌ ASCII only | ✅ Full Unicode handling |
+| Message Delivery Confirmation | ❌ No confirmation | ✅ Server sends **ack** back to client |
+| Client Feedback | ❌ Silent after sending | ✅ Prints `"Message received!"` after ACK |
+
+**Key Mechanics**
+- **Bit-Level Transmission:** Characters are converted into **8 bits**; each bit is sent as `SIGUSR1` (0) or `SIGUSR2` (1).  
+- **Signal Handler Assembly:** Server reconstructs characters **bit by bit** using bitwise operations.  
+- **Unicode Safety (Bonus):** Handles **multi-byte UTF-8 sequences** properly.  
+- **Acknowledgement Protocol (Bonus):** Server confirms full message receipt by sending a signal back; client prints `"✅ Message received!"`.  
 
 ---
 
 ## Features
-- ✅ Send and receive text messages between **client** and **server**.  
-- ✅ Messages are transmitted using **Unix signals** only.  
-- ✅ Works reliably for short and long messages.  
-- ✅ Provides **feedback on message delivery**.  
-
+- ✅ Real-time messaging using **Unix signals only**  
+- ✅ **Bit-level encoding & decoding**  
+- ✅ **Unicode support** (Bonus)  
+- ✅ **Server-to-client confirmation** (Bonus)  
+- ✅ Clean, modular implementation in **C**
+- ✅ Uses **Libft** for reusable utility functions  
 ---
 
-## Technologies
-- Language: C
-- Platform: Linux
+## Sequence Diagram
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Server
+    Client->>Server: Send bits via SIGUSR1 / SIGUSR2
+    Server->>Server: Reconstruct characters bit by bit
+    Server->>Client: Send ACK (Bonus)
+    Client->>Client: Print "Message received!"
+```
 
 ## Usage
 
 1. Clone the repository:
-```c
+```bash
 git clone https://github.com/khaledhajeid/minitalk.git
 cd minitalk
+
 ```
 2. Build the project using the Makefile:
-```c
+```bash
 make
 
 And for build the bonus files use:
@@ -47,22 +70,22 @@ make bonus
 This will generate server and client executables.
 
 3. Start the server:
-```c
+```bash
 ./server
 ```
 4. In a separate terminal, start the client and send a message:
-```c
+```bash
 ./client <server_pid> "Your message here"
 ```
 5. Clean up object files and executables:
-```c
+```bash
 make fclean
 ```
 
 ---
 
 ## File Structure
-```c
+```text
 minitalk/
 ├── client.c
 ├── server.c
@@ -70,13 +93,15 @@ minitalk/
 ├── server_bonus.c
 ├── minitalk.h
 ├── Makefile
+├── libft/          # Custom library used for utility functions
 └── README.md
 ```
 
 ---
 
 ## Project Highlights
-- My first experience with inter-process communication.
-- Learned Unix signals, bitwise operations, and process IDs.
-- Developed a small but complete communication protocol from scratch.
-- Built a foundation for more complex system-level projects.
+- Built a mini communication protocol from scratch without sockets.
+- Applied bitwise operations and signal-based IPC.
+- Learned synchronous signaling and acknowledgement systems between processes.
+- Bonus mode simulates a reliable messaging layer similar to TCP ACKs.
+- Integration with Libft allowed for cleaner, reusable code.
