@@ -20,7 +20,7 @@ The standard version sends ASCII characters bit by bit, while the bonus version 
 | Component | Standard Version | Bonus Version |
 |-----------|-----------------|---------------|
 | Data Transfer | Each character sent **bit by bit** using signals | ✅ Same |
-| Unicode Support | ❌ ASCII only | ✅ Full Unicode handling |
+| Unicode Support | ✅ Full Unicode handling | ✅ Full Unicode handling |
 | Message Delivery Confirmation | ❌ No confirmation | ✅ Server sends **ack** back to client |
 | Client Feedback | ❌ Silent after sending | ✅ Prints `"Message received!"` after ACK |
 
